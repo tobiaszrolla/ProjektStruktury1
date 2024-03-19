@@ -8,7 +8,11 @@ using namespace std;
 int main(){
     //Program na testy
     ArrayList<int> Array;
-    Array.AddBack(6);
-    cout<<Array.Size();
+    int z = 0;
+    while(z<5){
+        Array.AddFront(z*2);
+        cout<<Array.GetValue(z)<<endl;
+        z++;
+    }
     return 0;
 }
