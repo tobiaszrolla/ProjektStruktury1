@@ -1,32 +1,25 @@
 #include <iostream>
+#include <random>
+#include <time.h>
 #include "DoublyLinkedList.h"
 #include "SinglyLinkedList_a.h"
 #include "SinglyLinkedList_b.h"
 #include "ArrayList.h"
 using namespace std;
 
+
 int main(){
+    srand(time(NULL));
     //Program na testy
-    ArrayList<int> Array;
-    for(int i = 1; i <= 20; i++){
-        Array.AddFront(i*3);
+    DoublyLinkedList<int> DoubleList;
+    DoubleList.AddBack(444);
+    for(int i = 0; i< 10; i++){
+        DoubleList.AddBack(rand()%10);
     }
-    for(int i = 0; i < 20; i++){
-        cout<<Array.GetValue(i)<<endl;
-    }
-    cout<<Array.Size()<<endl;
-    cout<<Array.Capacity()<<endl<<endl;
-    /*for(int i = 0; i <5; i++){
-        Array.DelateFront();
-    }*/
-    //Array.AddPlace(666,19);
-    Array.DelatePlace(19);
-    cout<<Array.Size()<<endl;
-    cout<<Array.Capacity()<<endl<<endl;
-    for(int i = 0; i < 20; i++){
-        cout<<Array.GetValue(i)<<endl;
-    }
-    cout<<Array.GetValue(20)<<endl;
-    
+    DoubleList.Display();
+    cout<<endl;
+    DoubleList.DeliteRandom(3);
+    DoubleList.Display();  
+
     return 0;
 }

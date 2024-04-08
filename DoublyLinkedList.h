@@ -30,7 +30,9 @@ public:
     void Display();
     void AddRand(T value, int index);
     int Search(T value);
-
+    void DeliteBack();
+    void DeliteFront();
+    void DeliteRandom(int index);
 };
 
 
@@ -120,6 +122,59 @@ void DoublyLinkedList<T>::AddRand(T value, int index){
             }
             from_back->value = value;
         }
+    }
+
+}
+template <typename T>
+void DoublyLinkedList<T>::DeliteBack(){
+    Node3<T>* temp = tail;
+    if(tail->previuse != nullptr){
+        tail->previuse->next = nullptr;
+        tail = tail->previuse;
+        delete temp;
+    }
+    else{
+        tail = nullptr;
+        head = nullptr;
+        delete temp;
+    }
+}
+template <typename T>
+void DoublyLinkedList<T>::DeliteFront(){
+    Node3<T>* temp = head;
+    if(head->next != nullptr){
+        head->next->previuse = nullptr;
+        head = head->next;
+        delete temp;
+        
+    }
+    else{
+        tail = nullptr;
+        head = nullptr;
+        delete temp;
+    }
+    
+}
+template <typename T>
+void DoublyLinkedList<T>::DeliteRandom(int index){
+    if(index == 0){
+        DeliteFront();
+    }
+    else{
+       Node3<T>* curennt = head; 
+       int i = 0;
+       while(i < index && curennt != nullptr){
+        curennt = curennt->next;
+        i++;
+       }
+       if(curennt->next == nullptr){
+        DeliteBack();
+       }
+       else{
+        curennt->previuse->next = curennt->next;
+        curennt->next->previuse = curennt->previuse;
+        delete curennt;
+       }
     }
 
 }
