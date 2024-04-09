@@ -4,170 +4,181 @@
 
 using namespace std;
 
-template<typename T>
-class Node2 {
+template<typename T>                 
+class Node2 {                        // Definiujemy węzeł jako klasę
 public:
-    T data;
-    Node2* next;
+    T data;                          // Zmienna data typu T
+    Node2* next;                     // Wskaźnik na kolejny element typu Node2
 
-    Node2(T newData) : data(newData), next(nullptr) {}
+    Node2(T newData) : data(newData), next(nullptr) {}  // Konstruktor wieloargumentowy inicjalizujący wartości dla data i next
 };
 
-template<typename T>
-class SinglyLinkedList {
+template<typename T>                 
+class SinglyLinkedList {             // Definiujemy listę jako klasę 
 private:
-    Node2<T>* head;
-    Node2<T>* tail;
+    Node2<T>* head;                  // Wskaźnik na początek listy typu Node2<T>
+    Node2<T>* tail;                  // Wskaźnik na koniec listy typu Node2<T>
 
 public:
-    SinglyLinkedList() : head(nullptr), tail(nullptr) {}
-
-    ~SinglyLinkedList() {
-        Node2<T>* current = head;
-        while (current != nullptr) {
-            Node2<T>* next = current->next;
-            delete current;
-            current = next;
+    SinglyLinkedList() : head(nullptr), tail(nullptr) {}  // Konstruktor inicjalizujący wartoci dla head i tail
+    ~SinglyLinkedList() {            // Destruktor 
+        Node2<T>* current = head;    // Ustawiamy wskaźnik current na początek listy
+        while (current != nullptr) { // Dopóki current nie jest równy nullptr
+            Node2<T>* next = current->next;  // Ustawiamy next na wskaźnik na następny element
+            delete current;           // Zwalniamy pamięć bieżącego elementu
+            current = next;           // Przechodzimy do następnego elementu
         }
     }
 
-    void addToFront(T newData) {
-        Node2<T>* newNode = new Node2<T>(newData);
-        if (head == nullptr) {
-            head = newNode;
-            tail = newNode;
-        } else {
-            newNode->next = head;
-            head = newNode;
+    Node2<T>* find(T searchData) {   // Funkcja do wyszukiwania elementu
+        if (tail->data == searchData) {  // Jeśli dane w ostatnim elemencie są równe searchData
+            cout << "Znaleziony element: " << tail->data << endl;  // Wyświetlamy znaleziony element
+            return tail;              // Zwracamy wskaźnik na ostatni element
+        }
+        Node2<T>* current = head;     // Ustawiamy current na początek listy
+        while (current != nullptr) {  // Dopóki current nie jest równy nullptr
+            if (current->data == searchData) {  // Jeśli dane w bieżącym elemencie są równe searchData
+                cout << "Znaleziony element: " << current->data << endl;  // Wyświetlamy znaleziony element
+                return current;        // Zwracamy wskaźnik na bieżący element
+            }
+            current = current->next;  // Przechodzimy do następnego elementu
+        }
+        if (current == nullptr){      // Jeśli current jest równy nullptr
+            cout << "Brak elementu w liście" << endl;  // Wyświetlamy komunikat o braku elementu
+            return nullptr;           // Zwracamy nullptr
         }
     }
 
-    void addToBack(T newData) {
-        Node2<T>* newNode = new Node2<T>(newData);
-        if (tail == nullptr) {
-            head = newNode;
-            tail = newNode;
-        } else {
-            tail->next = newNode;
-            tail = newNode;
+    void addToFront(T newData) {     // Funkcja dodająca na początek
+        Node2<T>* newNode = new Node2<T>(newData);  // Tworzymy nowy element
+        if (head == nullptr) {        // Jeśli lista jest pusta
+            head = newNode;           // Ustaiamy head na nowy element
+            tail = newNode;           // Ustawiamy tail na nowy element
+        } else {                      // W przeciwnym razie
+            newNode->next = head;     // Ustawiamy wskaźnik next nowego elementu na obecny head
+            head = newNode;           // Ustawiamy head na nowy element
         }
     }
 
-    void addAtPosition(T newData, int position) {
-        if (position < 0) {
-            cerr << "Position must be a non-negative integer." << endl;
-            return;
+    void addToEnd(T newData) {       // Funkcja dodająca na koniec
+        Node2<T>* newNode = new Node2<T>(newData);  // Tworzymy nowy element
+        if (tail == nullptr) {        // Jeśli lista jest pusta
+            head = newNode;           // Ustawiamy head na nowy element
+            tail = newNode;           // Ustawiamy tail na nowy element
+        } else {                      // W przeciwnym razie
+            tail->next = newNode;     // Ustawiamy wskaźnik next ostatniego elementu na nowy element
+            tail = newNode;           // Ustawiamy tail na nowy element
         }
+    }
 
-        if (position == 0) {
-            addToFront(newData);
-        } else {
-            Node2<T>* newNode = new Node2<T>(newData);
-            Node2<T>* current = head;
-            int currentPosition = 0;
+    void addAtPosition(T newData, int position) {  // Funkcja dodająca na zadaną pozycję
+        if (position < 0) {           // Jeśli pozycja jest mniejsza od zera
+            return;                   // Kończymy funkcję
+        }
+        if (position == 0) {          // Jeśli pozycja jest równa zero
+            addToFront(newData);      // Dodajemy nowy element na początek listy
+        } else {                      // W przeciwnym razie
+            Node2<T>* newNode = new Node2<T>(newData);  // Tworzymy nowy element
+            Node2<T>* current = head; // Ustawiamy current na początek listy
+            int currentPosition = 0;  // Zmienna przechowująca bieżącą pozycję
 
-            while (current != nullptr && currentPosition < position - 1) {
-                current = current->next;
-                currentPosition++;
+            while (current != nullptr && currentPosition < position - 1) {  // Dopóki current nie jest równy nullptr i bieżąca pozycja jest mniejsza od pozycji - 1
+                current = current->next;  // Przechodzimy do następnego elementu
+                currentPosition++;       // Inkrementujemy bieżącą pozycję
             }
 
-            if (current == nullptr) {
-                cerr << "Position exceeds the size of the list." << endl;
-                return;
+            if (current == nullptr) {  // Jeśli current jest równy nullptr
+                return;                 // Kończymy funkcję
             }
 
-            newNode->next = current->next;
-            current->next = newNode;
-            if (current == tail) {
-                tail = newNode;
+            newNode->next = current->next;  // Ustawiamy wskaźnik next nowego elementu na next bieżącego elementu
+            current->next = newNode;         // Ustawiamy next bieżącego elementu na nowy element
+            if (current == tail) {           // Jeśli bieżący element jest równy tail
+                tail = newNode;              // Ustawiamy tail na nowy element
             }
         }
     }
 
-    void removeFromFront() {
-        if (head == nullptr) {
-            cerr << "List is empty. Cannot remove from an empty list." << endl;
-            return;
+    void removeFromFront() {          // Funkcja usuwająca na początku
+        if (head == nullptr) {        // Jeśli lista jest pusta
+            return;                   // Kończymy funkcję
         }
 
-        Node2<T>* temp = head;
-        head = head->next;
-        delete temp;
-        if (head == nullptr) {
-            tail = nullptr;
-        }
-    }
-
-    void removeFromBack() {
-        if (tail == nullptr) {
-            cerr << "List is empty. Cannot remove from an empty list." << endl;
-            return;
-        }
-
-        if (head == tail) {
-            delete head;
-            head = nullptr;
-            tail = nullptr;
-            return;
-        }
-
-        Node2<T>* current = head;
-        while (current->next != tail) {
-            current = current->next;
-        }
-
-        delete tail;
-        tail = current;
-        tail->next = nullptr;
-    }
-
-    void removeAtPosition(int position) {
-        if (position < 0) {
-            cerr << "Position must be a non-negative integer." << endl;
-            return;
-        }
-
-        if (head == nullptr) {
-            cerr << "List is empty. Cannot remove from an empty list." << endl;
-            return;
-        }
-
-        if (position == 0) {
-            removeFromFront();
-        } else {
-            Node2<T>* current = head;
-            Node2<T>* previous = nullptr;
-            int currentPosition = 0;
-
-            while (current != nullptr && currentPosition < position) {
-                previous = current;
-                current = current->next;
-                currentPosition++;
-            }
-
-            if (current == nullptr) {
-                cerr << "Position exceeds the size of the list." << endl;
-                return;
-            }
-
-            if (current == tail) {
-                tail = previous;
-            }
-
-            previous->next = current->next;
-            delete current;
+        Node2<T>* temp = head;        // Ustawiamy temp na pierwszy element listy
+        head = head->next;            // Ustawiamy head na następny element
+        delete temp;                  // Zwalniamy pamięć bieżącego elementu
+        if (head == nullptr) {        // Jeśli head jest równy nullptr
+            tail = nullptr;           // Ustawiamy tail na nullptr
         }
     }
 
-    void printList() {
-        Node2<T>* current = head;
-        while (current != nullptr) {
-            cout << current->data << " ";
-            current = current->next;
+    void removeFromEnd() {           // Funkcja usuwająca na końcu
+        if (tail == nullptr) {        // Jeśli lista jest pusta
+            return;                   // KOńczymy funkcję
         }
-        cout << endl;
+
+        if (head == tail) {           // Jeśli lista zawiera tylko jeden element
+            delete head;              // Zwolniamy pamięć jedynego elementu
+            head = nullptr;           // Ustawiamy head na nullptr
+            tail = nullptr;           // Ustawiamy tail na nullptr
+            return;                   // Kończymy funkcję
+        }
+
+        Node2<T>* current = head;     // Ustawiamy current na początek listy
+        while (current->next != tail) {  // Dopóki next bieżącego elementu nie jest równy tail
+            current = current->next;  // Przechodzimy do następnego elementu
+        }
+
+        delete tail;                  // Zwalniamy pamięć ostatniego elementu
+        tail = current;               // Ustawiamy tail na poprzedni element
+        tail->next = nullptr;         // Ustawiamy next ostatniego elementu na nullptr
+    }
+
+    void removeAtPosition(int position) {        // Funkcja usuwająca element na podanej pozycji
+        if (position < 0) {           // Jeśli pozycja jest mniejsza od zera
+            return;                   // Kończymy funkcję
+        }
+
+        if (head == nullptr) {        // Jeśli lista jest pusta
+            return;                   // Kończymy funkcję
+        }
+        
+
+        if (position == 0) {          // Jeśli pozycja jest równa zero
+            removeFromFront();       // Usuwamy pierwszy element z listy
+        } else {                      // W przeciwnym razie
+            Node2<T>* current = head; // Ustawiamy current na początek listy
+            Node2<T>* previous = nullptr;  // Ustawiamy previous na nullptr
+            int currentPosition = 0;  // Zmienna przechowująca bieżącą pozycję
+
+            while (current != nullptr && currentPosition < position) {  // Dopóki current nie jest równy nullptr i bieżąca pozycja jest mniejsza od pozycji
+                previous = current;     // Ustawiamy previous na bieżący element
+                current = current->next;  // Przechodzimy do następnego elementu
+                currentPosition++;       // Inkrementujemy bieżącą pozycję
+            }
+
+            if (current == nullptr) {  // Jeśli current jest równy nullptr
+                cerr << "Position exceeds the size of the list." << endl;  // Wyświetlamy komunikat o błędzie
+                return;                 // Kończymy funkcję
+            }
+
+            if (current == tail) {     // Jeśli bieżący element jest równy tail
+                tail = previous;        // Ustawiamy tail na poprzedni element
+            }
+
+            previous->next = current->next;  // Ustawiamy next poprzedniego elementu na next bieżącego elementu
+            delete current;               // Zwalniamy pamięć bieżącego elementu
+        }
+    }
+
+    void display() {                 // Funkcja wyświetlająca zawartość listy
+        Node2<T>* current = head;     // Ustawiamy current na początek listy
+        while (current != nullptr) {  // Dopóki current nie jest równy nullptr
+            cout << current->data << " ";  // Wyświetlamy dane bieżącego elementu
+            current = current->next;  // Przechodzimy do następnego elementu
+        }
+        cout << endl;               
     }
 };
-
 
 #endif
