@@ -2,54 +2,147 @@
 #define SINGLYLINKEDLIST_A_H
 #include <iostream>
 
-using namespace std;
+using namespace std;              
 
-template<typename T>
-class Node {
+template<typename T>                
+class Node {                         // Definiujemy węzeł jako klasę
 public:
-    T data;
-    Node* next;
-    Node(T val) : data(val), next(nullptr) {}
+    T data;                          // Zmienna data typu T
+    Node* next;                      // Wskaźnik na kolejny element typu Node
+
+    Node(T val) : data(val), next(nullptr) {}  // Konstruktor wieloargumentowy z ustawionymi wartościami dla data i next
 };
 
-template<typename T>
-class LinkedList {
+template<typename T>                 
+class LinkedList {                   // Definiujemy listę jako klasę
 private:
-    Node<T>* head;
+    Node<T>* head;                   // Wskaźnik head na początek listy 
 public:
-    LinkedList() : head(nullptr) {}
-    ~LinkedList() {
-        while (head != nullptr) {
-            Node<T>* temp = head;
-            head = head->next;
-            delete temp;
+    LinkedList() : head(nullptr) {}  // Konstruktor wieloargumentowy z ustawioną wartością head
+    ~LinkedList() {                   // Destruktor klasy LinkedList
+        while (head != nullptr) {    // Dopóki head nie jest równy nullptr
+            Node<T>* temp = head;    // Ustawiamy temp na początek listy
+            head = head->next;      // Ustawiamy head na następny element
+            delete temp;             // Zwalniamy pamięć bieżącego elementu
         }
     }
-    void addToFront(T val) {
-        Node<T>* newNode = new Node<T>(val);
-        newNode->next = head;
-        head = newNode;
-    }
-    void addToEnd(T val) {
-        Node<T>* newNode = new Node<T>(val);
-        if (head == nullptr) {
-            head = newNode;
+
+    Node<T>* find(T searchData) {    // Funkcja do wyszukiwania elementu
+        Node<T>* current = head;     // Ustawiamy current na początek listy
+        while (current != nullptr) {   // Dopóki current nie jest równy nullptr
+            if (current->data == searchData) {    // Jeśli dane w bieżącym elemencie są równe searchData
+                cout << "Znaleziony element: " << current->data << endl;  // Wyświetlamy znaleziony element
+                return current;        // Zwracamy wskaźnik na bieżący element
+            }
+            current = current->next;   // Przechodzimy do następnego elementu
         }
-        else {
-            Node<T>* temp = head;
-            while (temp->next != nullptr) {
+        if (current == nullptr){      // Jeśli current jest równy nullptr
+            cout << "Brak elementu w liście" << endl;  // Wyświetlamy komunikat o braku elementu
+            return nullptr;           // Zwracamy nullptr
+        }
+        }
+    }
+
+    void addToFront(T val) {         // Funkcja dodająca na początek
+        Node<T>* newNode = new Node<T>(val);  // Tworzymy nowy element
+        newNode->next = head;         // Ustawiamy wskaźnik next nowego elementu na obecny head
+        head = newNode;               // Ustawiamy head na nowy element
+    }
+
+    void removeFromFront() {         // Funkcja usuwająca z początku
+        if (head != nullptr) {        // Jeśli lista nie jest pusta
+            Node<T>* temp = head;     // Ustawiamy temp na pierwszy element listy
+            head = head->next;        // Ustawiamy head na następny element
+            delete temp;              // Zwalniamy pamięć bieżącego elementu
+        }
+    }
+
+    void addToEnd(T val) {           // Funkcja dodająca na koniec
+        Node<T>* newNode = new Node<T>(val);  // TWorzymy nowy element
+        if (head == nullptr) {        // Jeśli lista jest pusta
+            head = newNode;           // Ustawiamy head na nowy element
+        }
+        else {                        // W przeciwnym razie
+            Node<T>* temp = head;     // Ustawiamy temp na początek listy
+            while (temp->next != nullptr) {  // Dopóki next temp nie jest równy nullptr
+                temp = temp->next;     // Przechodzimy do następnego elementu
+            }
+            temp->next = newNode;     // Ustawiamy wskaźnik next ostatniego elementu na nowy element
+        }
+    }
+
+    void removeFromEnd() {           // Funkcja usuwająca na końcu
+        if (head != nullptr) {        // Jeśli lista nie jest pusta
+            if (head->next == nullptr) {  // Jeśli lista zawiera tylko jeden element
+                delete head;          // Zwolniamy pamięć jedynego elementu
+                head = nullptr;       // Ustawiamy head na nullptr
+            }
+            else {                    // W przeciwnym razie
+                Node<T>* temp = head; // Ustawiamy temp na początek listy
+                while (temp->next->next != nullptr) {  // Dopóki next next temp nie jest równy nullptr
+                    temp = temp->next; // Przechodzimy do następnego elementu
+                }
+                delete temp->next;   // Zwolniamy pamięć ostatniego elementu
+                temp->next = nullptr;  // Ustawiamy next ostatniego elementu na nullptr
+            }
+        }
+    }
+
+    void addAtPosition(T val, int position) {  // Funkcja dodająca na określonej pozycji
+        if (position < 0) {                    // Jeżeli pozycja jest ujemna, kończymy funkcję
+            return; 
+        }
+        Node<T>* newNode = new Node<T>(val);   // Tworzymy nowy węzeł z wartością 'val'
+        if (position == 0) {                    // Jeżeli pozycja to 0
+            newNode->next = head;               // Ustawiamy 'next' nowego węzła na obecny 'head'
+            head = newNode;                     // Ustawiamy 'head' na nowy węzeł
+        } else {                                // Jeżeli pozycja nie jest 0
+            Node<T>* temp = head;               // Ustawiamy wskaźnik 'temp' na początek listy
+            for (int i = 0; temp != nullptr && i < position - 1; i++) {  // Przesuwamy 'temp' do elementu przed określoną pozycją
                 temp = temp->next;
             }
-            temp->next = newNode;
+            if (temp == nullptr) {              // Jeżeli 'temp' jest nullptr, kończymy funkcję
+                return; 
+            }
+            newNode->next = temp->next;         // Ustawiamy 'next' nowego węzła na 'next' węzła 'temp'
+            temp->next = newNode;               // Ustawiamy 'next' węzła 'temp' na nowy węzeł
         }
     }
-    void display() {
-        Node<T>* temp = head;
-        while (temp != nullptr) {
-            cout << temp->data << " ";
-            temp = temp->next;
+
+    void removeAtPosition(int position) {       // Funckja usuwającą element na określonej pozycji
+        if (position < 0) {  // Jeżeli pozycja jest ujemna lub lista jest pusta, kończymy funkcję
+            return; 
         }
-        cout << endl;
+        if (head == nullptr) {        // Jeśli lista jest pusta
+            return;                   // kończymy funkcję
+        }
+        Node<T>* temp = head;                   // Ustawiamy wskaźnik 'temp' na początek listy
+        if (position == 0) {                    // Jeżeli pozycja to 0
+            head = head->next;                   // Przesuwamy 'head' na następny element
+            delete temp;                         // Zwalniamy pamięć bieżącego elementu
+        } else {                                // Jeżeli pozycja nie jest 0
+            for (int i = 0; temp != nullptr && i < position - 1; i++) {  // Przesuwamy 'temp' do elementu przed określoną pozycją
+                temp = temp->next;
+            }
+            if (temp == nullptr || temp->next == nullptr) {  // Jeżeli 'temp' jest nullptr lub 'next' węzła 'temp' jest nullptr, kończymy funkcję
+                return; 
+            }
+            Node<T>* toDelete = temp->next;     // Ustawiamy wskaźnik 'toDelete' na węzeł do usunięcia
+            temp->next = toDelete->next;        // Przesuwamy 'next' węzła 'temp' na 'next' węzła 'toDelete'
+            delete toDelete;                    // Zwalniamy pamięć węzła 'toDelete'
+        }
+    }
+
+
+    void display() {                  // Funkcja wyświetlająca zawartość listy
+        Node<T>* temp = head;          // Ustawiamy temp na początek listy
+        while (temp != nullptr) {      // Dopóki temp nie jest równy nullptr
+            cout << temp->data << " "; // Wyświetlamy dane bieżącego elementu
+            temp = temp->next;         // Przechodzimy do następnego elementu
+        }
+        cout << endl;              
     }
 };
-#endif
+
+#endif                               
+
