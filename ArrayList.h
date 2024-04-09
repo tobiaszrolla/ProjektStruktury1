@@ -24,6 +24,8 @@ public:
     void DelateBack();
     void DelateFront();
     void DelatePlace(unsigned index);
+    void Display();
+    T Serch(T number);
 };
 //Podstawowy Konstruktor z ustalonym rozmiarem
 template <typename T>
@@ -38,16 +40,21 @@ ArrayList<T>::~ArrayList(){
 //Metoda powiększająca ArrayList w momęcie przekroczenia rozmiaru
 template <typename T>
 void ArrayList<T>::Resaiz(unsigned newCapacity){
-    capacity = newCapacity;
-    T *array_pom = new T[capacity];
-    for(int i = 0; i < size; i++){
+    capacity = newCapacity;                         //zmiana rozmiaru tablicy
+    T *array_pom = new T[capacity];                 //tablica do przepisania elementów
+    for(int i = 0; i < size; i++){                  //przepisanie
         array_pom[i] = array[i];
     }
-    delete[] array;
-    array = array_pom;
+    delete[] array;                                 //usuwanie starej tablicy 
+    array = array_pom;                              //array to teraz nowa tablica
     
 }
-
+template <typename T>
+void ArrayList<T>::Display(){
+    for(int i = 0; i<size; i++){
+        cout<<array[i]<<endl;
+    }
+}
 template <typename T>
 unsigned ArrayList<T>::Size(){
     return size;
@@ -71,91 +78,87 @@ T ArrayList<T>::GetValue(unsigned index){
 //metoda dodająca do tyłu;
 template <typename T>
 void ArrayList<T>::AddBack(T number){
-    if(size != capacity){
-        array[size] = number;
-        size++;
-    }
+    if(size != capacity){               //jeżeli starczy miejsca
+        array[size] = number;           //jako ostatni jest number
+        size++;                         // ilość elementów ikrementacja
+    }   
     else{
-        Resaiz(capacity*2);
-        array[size] = number;
-        size++;
+        Resaiz(capacity*2);             //Powiększenie miejsca o 2
+        array[size] = number;           //jako ostatni jest number
+        size++;                         // ilość elementów ikrementacja
     }
 }
 
 //metoda dodająca na początek
 template <typename T>
 void ArrayList<T>::AddFront(T number){
-    if(size == capacity){
-        capacity *= 2;
-        T *array_pom = new T[capacity];
+    if(size == capacity){               //jeżeli ilość elementów zajmie całe miejsce
+        capacity *= 2;                  //miejsce razy 2
+        T *array_pom = new T[capacity]; //Noswy tablica do przepisania
         for(int i = 0; i < size; i++){
-        array_pom[i+1] = array[i];
+        array_pom[i+1] = array[i];      //przepisanie na kolejne miejsce
         }
-        delete[] array;
-        array = array_pom;
+        delete[] array;                 //usunięcie starej tablicy
+        array = array_pom;              // zmian tablicy w miescu array
     }
-    else{
-        for(int i = size; i>0; i--){
+    else{                              //jeżeli ilość elementów nie zajmie całe miejsce
+        for(int i = size; i>0; i--){    //przepisanie na kolejne miejsce
             array[i] = array[i-1];
         }
     }
-    array[0] = number;
+    array[0] = number;              //przypisanie pierwszego elementu tablicy
     size++;
 }
 
 //metoda usuwająca z tyłu
-template <typename T>
+template <typename T> 
 void ArrayList<T>::DelateBack(){
-    if(capacity > 0){
-        size--;
-        Resaiz(size);
+    if(size > 0){
+        size--;                     //dekrementacja ilości elementów
     }
 }
 
 //metoda usuwająca pierwszy element
 template <typename T>
 void ArrayList<T>::DelateFront(){
-    if(capacity > 0){
-        size--;
-        T *array_pom = new T[size];
+    if(size > 0){
+        size--;                         //dekrementacja ilości elementów  
         for(int i = 0; i < size; i++){
-            array_pom[i] = array[i+ 1];
+            array[i] = array[i + 1];    //przepisanie elementów
         }
-        delete[] array;
-        array = array_pom;
-        capacity = size;
     }
 }
 //Dodaje element na dowolne miejsce;
 template <typename T>
 void ArrayList<T>::AddPlace(T number, unsigned index){
-    if(index < capacity){
-        array[index] = number;
+    if(size == capacity){                               //gdy ilość elementów osiągnie rozmiar zwiększ tablicę i przepisz elementy
+        Resaiz(capacity*2);
     }
-    else{
-        Resaiz(index+1);
-        for(int i = size; i<index + 1; i++){
-            array[i] = 0;
+    if(index < size && index > 0){                      //warunki że index jest w tabeli                   
+        for(int i = size; i > index; i++){              //przepisanie elementów
+            array[i] = array[i-1];
         }
-        array[index] = number;
-        size = index + 1;
+        array[index] = number;                          // dodanie w miejscu index wartości number
+        size++;                                         //ikrementacja rozmiaru
     }
+
 }
 //Usuwa dowolny element
 template <typename T>
 void ArrayList<T>::DelatePlace(unsigned index){
-    if(index <= capacity){
-        T *array_pom =new T[size - 1];
-        for(int i = 0; i < index; i++){
-            array_pom[i] = array[i];
+    if(size > 0 && index > 0 && index < size){         //jeśli index jiest w tablicy
+        for(int i = index; i<size; i++){              //przepisz na prawo od indexu na jego miejsce
+            array[i]= array[i + 1];
         }
-        for(int i = index; i < size; i++){
-            array_pom[i] = array[i + 1];
+        size--;                                       //dekrementacja ilośći elementów
+    }
+}
+template <typename T>
+T ArrayList<T>::Serch(T number){
+    for(int i = 0; i<size; i++){                     //dopuki nie osiąnie size
+        if(number == array[i]){                      // czy to miejsce nie jest równe wartości
+            return(array[i]);                       //gdy tak zwróć wartość     
         }
-        delete[] array;
-        array = array_pom;
-        size = size--;
-        capacity = size;
     }
 }
 #endif
