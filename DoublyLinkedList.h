@@ -1,5 +1,6 @@
 #ifndef DOUBLYLINKEDLIST_H
 #define DOUBLYLINKEDLIST_H
+#include "List.h"
 using namespace std;
 
 //struktura karzdego z węzłów
@@ -17,6 +18,7 @@ public:
 
 template <typename T>
 class DoublyLinkedList
+    :public List<T>
 {
 private:
     Node3<T>* head;
@@ -29,11 +31,11 @@ public:
     void AddBack(T value);
     void AddFront(T value);
     void Display();
-    void AddRand(T value, int index);
+    void AddPlace(T value, int index);
     int Search(T value);
-    void DeliteBack();
-    void DeliteFront();
-    void DeliteRandom(int index);
+    void RemoveBack();
+    void RemoveFront();
+    void RemovePlace(int index);
 };
 
  
@@ -97,7 +99,7 @@ int  DoublyLinkedList<T>::Search(T value){
     }
 }
 template <typename T>                                   //Dodawnaie elementu w dowolnym miejscu
-void DoublyLinkedList<T>::AddRand(T value, int index){
+void DoublyLinkedList<T>::AddPlace(T value, int index){
     if(index == 0){                                     //Kiedy początek koniec                 
         AddFront(value);
     }
@@ -121,7 +123,7 @@ void DoublyLinkedList<T>::AddRand(T value, int index){
 
 }
 template <typename T>
-void DoublyLinkedList<T>::DeliteBack(){
+void DoublyLinkedList<T>::RemoveBack(){
     Node3<T>* temp = tail;                      //Usuwanie elementu na końcu przez przepisanie wskaźnikuw na przedostatni element
     if(tail->previuse != nullptr){
         tail->previuse->next = nullptr;
@@ -136,7 +138,7 @@ void DoublyLinkedList<T>::DeliteBack(){
     size--;
 }
 template <typename T>
-void DoublyLinkedList<T>::DeliteFront(){     //Usuwanie elementu na początku przez przepisanie wskaźnikuw na drugi element
+void DoublyLinkedList<T>::RemoveFront(){     //Usuwanie elementu na początku przez przepisanie wskaźnikuw na drugi element
     Node3<T>* temp = head;
     if(head->next != nullptr){               // Gdy element nie jest jedyny
         head->next->previuse = nullptr;      //ustawienie przed drugim jako null
@@ -153,12 +155,12 @@ void DoublyLinkedList<T>::DeliteFront(){     //Usuwanie elementu na początku pr
     
 }
 template <typename T>
-void DoublyLinkedList<T>::DeliteRandom(int index){  //Usuwanie elementu na dowolnym miejscu.
+void DoublyLinkedList<T>::RemovePlace(int index){  //Usuwanie elementu na dowolnym miejscu.
     if(index == 0){                                 //Kiedy pierszy bądz ostatni uruchamia delate Front i Back
-        DeliteFront();
+        RemoveFront();
     }
     else if(index == size){
-        DeliteBack();
+        RemoveBack();
     }
     else{                                           
        Node3<T>* curennt = head;                    //Wskażni przeszukujący

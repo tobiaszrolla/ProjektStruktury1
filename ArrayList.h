@@ -1,11 +1,13 @@
 #ifndef ARRAYLIST_H
 #define ARRAYLIST_H
+#include "List.h"
 using namespace std;
 
 // sortowanie przez scalanie
 
 template <typename T>
 class ArrayList
+    :public List<T>
 {
 private:
     unsigned size;
@@ -21,11 +23,11 @@ public:
     void AddBack(T number);
     void AddFront(T number);
     void AddPlace(T number, unsigned index);
-    void DelateBack();
-    void DelateFront();
-    void DelatePlace(unsigned index);
+    void RemoveBack();
+    void RemoveFront();
+    void RemovePlace(unsigned index);
     void Display();
-    T Serch(T number);
+    int Search(T number);
 };
 //Podstawowy Konstruktor z ustalonym rozmiarem
 template <typename T>
@@ -112,7 +114,7 @@ void ArrayList<T>::AddFront(T number){
 
 //metoda usuwająca z tyłu
 template <typename T> 
-void ArrayList<T>::DelateBack(){
+void ArrayList<T>::RemoveBack(){
     if(size > 0){
         size--;                     //dekrementacja ilości elementów
     }
@@ -120,7 +122,7 @@ void ArrayList<T>::DelateBack(){
 
 //metoda usuwająca pierwszy element
 template <typename T>
-void ArrayList<T>::DelateFront(){
+void ArrayList<T>::RemoveFront(){
     if(size > 0){
         size--;                         //dekrementacja ilości elementów  
         for(int i = 0; i < size; i++){
@@ -145,7 +147,7 @@ void ArrayList<T>::AddPlace(T number, unsigned index){
 }
 //Usuwa dowolny element
 template <typename T>
-void ArrayList<T>::DelatePlace(unsigned index){
+void ArrayList<T>::RemovePlace(unsigned index){
     if(size > 0 && index > 0 && index < size){         //jeśli index jiest w tablicy
         for(int i = index; i<size; i++){              //przepisz na prawo od indexu na jego miejsce
             array[i]= array[i + 1];
@@ -154,10 +156,10 @@ void ArrayList<T>::DelatePlace(unsigned index){
     }
 }
 template <typename T>
-T ArrayList<T>::Serch(T number){
+int ArrayList<T>::Search(T number){
     for(int i = 0; i<size; i++){                     //dopuki nie osiąnie size
         if(number == array[i]){                      // czy to miejsce nie jest równe wartości
-            return(array[i]);                       //gdy tak zwróć wartość     
+            return(i);                       //gdy tak zwróć wartość     
         }
     }
 }
