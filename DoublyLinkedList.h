@@ -32,10 +32,10 @@ public:
     void AddFront(T value);
     void Display();
     void AddPlace(T value, int index);
-    int Search(T value);
+    bool Search(T value);
     void RemoveBack();
     void RemoveFront();
-    void RemovePlace(int index);
+    bool RemovePlace(int index);
 };
 
  
@@ -87,23 +87,31 @@ void DoublyLinkedList<T>::AddFront(T newvalue){
     size++;
 }
 template <typename T>                     //Wyszukiwanie od head przechodzi przez strukturę nextem aż nż do znalezienia
-int  DoublyLinkedList<T>::Search(T value){
+bool  DoublyLinkedList<T>::Search(T value){
+    if(head == nullptr){                        //lista jest pusta zwróć false
+        return(false);
+    }
     Node3<T>* temp = head;
     int i = 0;
     while(temp != nullptr){               //Pętla która szuka aż do końca tablicy następnie zwraca index elementu
         if(temp -> value == value){
-            return(i);
+            return(true);
+            cout<<"DoubleLinkedList find:"<<i<<endl;
         }
         temp = temp->next;
         i++;
     }
+    return(false);                           //gdy nic nie znajdziemu false;
 }
 template <typename T>                                   //Dodawnaie elementu w dowolnym miejscu
 void DoublyLinkedList<T>::AddPlace(T value, int index){
-    if(index == 0){                                     //Kiedy początek koniec                 
+    if(index < 0 || index >= size){                                     //Kiedy początek koniec                 
+        return;
+    }
+    else if(index == 0){
         AddFront(value);
     }
-    else if(index == size){
+    else if(index == size - 1){
         AddBack(value);
     }
     else{
@@ -155,12 +163,17 @@ void DoublyLinkedList<T>::RemoveFront(){     //Usuwanie elementu na początku pr
     
 }
 template <typename T>
-void DoublyLinkedList<T>::RemovePlace(int index){  //Usuwanie elementu na dowolnym miejscu.
+bool DoublyLinkedList<T>::RemovePlace(int index){
+    if(index < 0 || index >= size){
+        return(false);
+    }                                                  //Usuwanie elementu na dowolnym miejscu.
     if(index == 0){                                 //Kiedy pierszy bądz ostatni uruchamia delate Front i Back
         RemoveFront();
+        return(true);
     }
-    else if(index == size){
+    else if(index == size - 1){
         RemoveBack();
+        return(true);
     }
     else{                                           
        Node3<T>* curennt = head;                    //Wskażni przeszukujący
@@ -172,7 +185,8 @@ void DoublyLinkedList<T>::RemovePlace(int index){  //Usuwanie elementu na dowoln
         curennt->previuse->next = curennt->next;        // przepisanie wskażnika na następny w poprzednim
         curennt->next->previuse = curennt->previuse;    // przepisanie wskaźnika na poprzedni w nastempnym
         delete curennt;                                 // usunięcie elementu
-        size--;                                         // dekrementacja rozmiaru
+        size--;
+        return(true);                                         // dekrementacja rozmiaru
     }
 
 }

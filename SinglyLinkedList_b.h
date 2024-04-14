@@ -30,7 +30,7 @@ public:
         }
     }
 
-    Node2<T>* find(T searchData) {   // Funkcja do wyszukiwania elementu
+    Node2<T>* Search(T searchData) {   // Funkcja do wyszukiwania elementu
         if (tail->data == searchData) {  // Jeśli dane w ostatnim elemencie są równe searchData
             cout << "Znaleziony element: " << tail->data << endl;  // Wyświetlamy znaleziony element
             return tail;              // Zwracamy wskaźnik na ostatni element
@@ -49,7 +49,7 @@ public:
         }
     }
 
-    void addToFront(T newData) {     // Funkcja dodająca na początek
+    void AddFront(T newData) {     // Funkcja dodająca na początek
         Node2<T>* newNode = new Node2<T>(newData);  // Tworzymy nowy element
         if (head == nullptr) {        // Jeśli lista jest pusta
             head = newNode;           // Ustaiamy head na nowy element
@@ -60,7 +60,7 @@ public:
         }
     }
 
-    void addToEnd(T newData) {       // Funkcja dodająca na koniec
+    void AddBack(T newData) {       // Funkcja dodająca na koniec
         Node2<T>* newNode = new Node2<T>(newData);  // Tworzymy nowy element
         if (tail == nullptr) {        // Jeśli lista jest pusta
             head = newNode;           // Ustawiamy head na nowy element
@@ -71,12 +71,12 @@ public:
         }
     }
 
-    void addAtPosition(T newData, int position) {  // Funkcja dodająca na zadaną pozycję
+    void AddPlace(T newData, int position) {  // Funkcja dodająca na zadaną pozycję
         if (position < 0) {           // Jeśli pozycja jest mniejsza od zera
             return;                   // Kończymy funkcję
         }
         if (position == 0) {          // Jeśli pozycja jest równa zero
-            addToFront(newData);      // Dodajemy nowy element na początek listy
+            AddFront(newData);      // Dodajemy nowy element na początek listy
         } else {                      // W przeciwnym razie
             Node2<T>* newNode = new Node2<T>(newData);  // Tworzymy nowy element
             Node2<T>* current = head; // Ustawiamy current na początek listy
@@ -99,7 +99,7 @@ public:
         }
     }
 
-    void removeFromFront() {          // Funkcja usuwająca na początku
+    void RemoveFront() {          // Funkcja usuwająca na początku
         if (head == nullptr) {        // Jeśli lista jest pusta
             return;                   // Kończymy funkcję
         }
@@ -112,7 +112,7 @@ public:
         }
     }
 
-    void removeFromEnd() {           // Funkcja usuwająca na końcu
+    void RemoveBack() {           // Funkcja usuwająca na końcu
         if (tail == nullptr) {        // Jeśli lista jest pusta
             return;                   // KOńczymy funkcję
         }
@@ -134,18 +134,18 @@ public:
         tail->next = nullptr;         // Ustawiamy next ostatniego elementu na nullptr
     }
 
-    void removeAtPosition(int position) {        // Funkcja usuwająca element na podanej pozycji
+    bool RemovePlace(int position) {        // Funkcja usuwająca element na podanej pozycji
         if (position < 0) {           // Jeśli pozycja jest mniejsza od zera
-            return;                   // Kończymy funkcję
+            return(false);                   // Kończymy funkcję
         }
 
         if (head == nullptr) {        // Jeśli lista jest pusta
-            return;                   // Kończymy funkcję
+            return(false);                   // Kończymy funkcję
         }
         
 
         if (position == 0) {          // Jeśli pozycja jest równa zero
-            removeFromFront();       // Usuwamy pierwszy element z listy
+            RemoveFront();       // Usuwamy pierwszy element z listy
         } else {                      // W przeciwnym razie
             Node2<T>* current = head; // Ustawiamy current na początek listy
             Node2<T>* previous = nullptr;  // Ustawiamy previous na nullptr
@@ -159,7 +159,7 @@ public:
 
             if (current == nullptr) {  // Jeśli current jest równy nullptr
                 cerr << "Position exceeds the size of the list." << endl;  // Wyświetlamy komunikat o błędzie
-                return;                 // Kończymy funkcję
+                return(false);                 // Kończymy funkcję
             }
 
             if (current == tail) {     // Jeśli bieżący element jest równy tail
@@ -167,7 +167,8 @@ public:
             }
 
             previous->next = current->next;  // Ustawiamy next poprzedniego elementu na next bieżącego elementu
-            delete current;               // Zwalniamy pamięć bieżącego elementu
+            delete current;
+            return(true);               // Zwalniamy pamięć bieżącego elementu
         }
     }
 

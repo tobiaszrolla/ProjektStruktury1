@@ -20,14 +20,15 @@ public:
     unsigned Size();
     unsigned Capacity();
     T GetValue(unsigned index);
-    void AddBack(T number);
-    void AddFront(T number);
-    void AddPlace(T number, unsigned index);
+    void AddBack(T element);
+    void AddFront(T element);
+    void AddPlace(T element, int index);
     void RemoveBack();
     void RemoveFront();
-    void RemovePlace(unsigned index);
+    bool RemovePlace(int index);
     void Display();
-    int Search(T number);
+    bool Search(T element);
+    ArrayList<T>* Copy();
 };
 //Podstawowy Konstruktor z ustalonym rozmiarem
 template <typename T>
@@ -79,36 +80,36 @@ T ArrayList<T>::GetValue(unsigned index){
 
 //metoda dodająca do tyłu;
 template <typename T>
-void ArrayList<T>::AddBack(T number){
+void ArrayList<T>::AddBack(T element){
     if(size != capacity){               //jeżeli starczy miejsca
-        array[size] = number;           //jako ostatni jest number
+        array[size] = element;           //jako ostatni jest number
         size++;                         // ilość elementów ikrementacja
     }   
     else{
         Resaiz(capacity*2);             //Powiększenie miejsca o 2
-        array[size] = number;           //jako ostatni jest number
+        array[size] = element;           //jako ostatni jest number
         size++;                         // ilość elementów ikrementacja
     }
 }
 
 //metoda dodająca na początek
 template <typename T>
-void ArrayList<T>::AddFront(T number){
+void ArrayList<T>::AddFront(T element){
     if(size == capacity){               //jeżeli ilość elementów zajmie całe miejsce
         capacity *= 2;                  //miejsce razy 2
         T *array_pom = new T[capacity]; //Noswy tablica do przepisania
-        for(int i = 0; i < size; i++){
-        array_pom[i+1] = array[i];      //przepisanie na kolejne miejsce
+        for(int i = size; i > 0; --i){
+            array_pom[i] = array[i-1];      //przepisanie na kolejne miejsce
         }
         delete[] array;                 //usunięcie starej tablicy
         array = array_pom;              // zmian tablicy w miescu array
     }
     else{                              //jeżeli ilość elementów nie zajmie całe miejsce
-        for(int i = size; i>0; i--){    //przepisanie na kolejne miejsce
+        for(int i = size; i>0; --i){    //przepisanie na kolejne miejsce
             array[i] = array[i-1];
         }
     }
-    array[0] = number;              //przypisanie pierwszego elementu tablicy
+    array[0] = element;              //przypisanie pierwszego elementu tablicy
     size++;
 }
 
@@ -132,35 +133,45 @@ void ArrayList<T>::RemoveFront(){
 }
 //Dodaje element na dowolne miejsce;
 template <typename T>
-void ArrayList<T>::AddPlace(T number, unsigned index){
+void ArrayList<T>::AddPlace(T element, int index){
+    if(index < 0 || index >= size){                                                    //warunki że index jest w tabeli    
+        return;
+    }
     if(size == capacity){                               //gdy ilość elementów osiągnie rozmiar zwiększ tablicę i przepisz elementy
         Resaiz(capacity*2);
+    }               
+    for(int i = size; i > index; --i){              //przepisanie elementów
+        array[i] = array[i-1];
     }
-    if(index < size && index > 0){                      //warunki że index jest w tabeli                   
-        for(int i = size; i > index; i++){              //przepisanie elementów
-            array[i] = array[i-1];
-        }
-        array[index] = number;                          // dodanie w miejscu index wartości number
-        size++;                                         //ikrementacja rozmiaru
+    array[index] = element;                          // dodanie w miejscu index wartości number
+    size++;                                             //ikrementacja rozmiaru
     }
-
-}
 //Usuwa dowolny element
 template <typename T>
-void ArrayList<T>::RemovePlace(unsigned index){
+bool ArrayList<T>::RemovePlace(int index){
     if(size > 0 && index > 0 && index < size){         //jeśli index jiest w tablicy
         for(int i = index; i<size; i++){              //przepisz na prawo od indexu na jego miejsce
             array[i]= array[i + 1];
         }
-        size--;                                       //dekrementacja ilośći elementów
+        size--;
+        return(true);                                       //dekrementacja ilośći elementów
+    }
+    else{
+        return(false);
     }
 }
 template <typename T>
-int ArrayList<T>::Search(T number){
+bool ArrayList<T>::Search(T number){
+    if(size == 0){                              // jeżel lista jest pusta zwróć false
+        return(false);
+    }
     for(int i = 0; i<size; i++){                     //dopuki nie osiąnie size
-        if(number == array[i]){                      // czy to miejsce nie jest równe wartości
-            return(i);                       //gdy tak zwróć wartość     
+        if(number == array[i]){
+            cout<<"ArrayList find: "<<i<<endl;//gdy znajdzie wyświetl index zwróć true;
+            return(true);
         }
     }
+    return(false);//jeśli nie ma elementu w liście zwróć false
 }
+
 #endif

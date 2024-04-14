@@ -27,7 +27,7 @@ public:
         }
     }
 
-    Node<T>* find(T searchData) {    // Funkcja do wyszukiwania elementu
+    Node<T>* Search(T searchData) {    // Funkcja do wyszukiwania elementu
         Node<T>* current = head;     // Ustawiamy current na początek listy
         while (current != nullptr) {   // Dopóki current nie jest równy nullptr
             if (current->data == searchData) {    // Jeśli dane w bieżącym elemencie są równe searchData
@@ -41,15 +41,14 @@ public:
             return nullptr;           // Zwracamy nullptr
         }
         }
-    }
 
-    void addToFront(T val) {         // Funkcja dodająca na początek
+    void AddFront(T val) {         // Funkcja dodająca na początek
         Node<T>* newNode = new Node<T>(val);  // Tworzymy nowy element
         newNode->next = head;         // Ustawiamy wskaźnik next nowego elementu na obecny head
         head = newNode;               // Ustawiamy head na nowy element
     }
 
-    void removeFromFront() {         // Funkcja usuwająca z początku
+    void RemoveFront() {         // Funkcja usuwająca z początku
         if (head != nullptr) {        // Jeśli lista nie jest pusta
             Node<T>* temp = head;     // Ustawiamy temp na pierwszy element listy
             head = head->next;        // Ustawiamy head na następny element
@@ -57,7 +56,7 @@ public:
         }
     }
 
-    void addToEnd(T val) {           // Funkcja dodająca na koniec
+    void AddBack(T val) {           // Funkcja dodająca na koniec
         Node<T>* newNode = new Node<T>(val);  // TWorzymy nowy element
         if (head == nullptr) {        // Jeśli lista jest pusta
             head = newNode;           // Ustawiamy head na nowy element
@@ -71,7 +70,7 @@ public:
         }
     }
 
-    void removeFromEnd() {           // Funkcja usuwająca na końcu
+    void RemoveBack() {           // Funkcja usuwająca na końcu
         if (head != nullptr) {        // Jeśli lista nie jest pusta
             if (head->next == nullptr) {  // Jeśli lista zawiera tylko jeden element
                 delete head;          // Zwolniamy pamięć jedynego elementu
@@ -88,7 +87,7 @@ public:
         }
     }
 
-    void addAtPosition(T val, int position) {  // Funkcja dodająca na określonej pozycji
+    void AddPlace(T val, int position) {  // Funkcja dodająca na określonej pozycji
         if (position < 0) {                    // Jeżeli pozycja jest ujemna, kończymy funkcję
             return; 
         }
@@ -109,12 +108,12 @@ public:
         }
     }
 
-    void removeAtPosition(int position) {       // Funckja usuwającą element na określonej pozycji
+    bool RemovePlace(int position) {       // Funckja usuwającą element na określonej pozycji
         if (position < 0) {  // Jeżeli pozycja jest ujemna lub lista jest pusta, kończymy funkcję
-            return; 
+            return(false); 
         }
         if (head == nullptr) {        // Jeśli lista jest pusta
-            return;                   // kończymy funkcję
+            return(false);                   // kończymy funkcję
         }
         Node<T>* temp = head;                   // Ustawiamy wskaźnik 'temp' na początek listy
         if (position == 0) {                    // Jeżeli pozycja to 0
@@ -125,11 +124,12 @@ public:
                 temp = temp->next;
             }
             if (temp == nullptr || temp->next == nullptr) {  // Jeżeli 'temp' jest nullptr lub 'next' węzła 'temp' jest nullptr, kończymy funkcję
-                return; 
+                return(false); 
             }
             Node<T>* toDelete = temp->next;     // Ustawiamy wskaźnik 'toDelete' na węzeł do usunięcia
             temp->next = toDelete->next;        // Przesuwamy 'next' węzła 'temp' na 'next' węzła 'toDelete'
-            delete toDelete;                    // Zwalniamy pamięć węzła 'toDelete'
+            delete toDelete;   
+            return(true);                 // Zwalniamy pamięć węzła 'toDelete'
         }
     }
 

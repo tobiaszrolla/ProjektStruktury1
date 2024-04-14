@@ -12,8 +12,8 @@ class List{
         virtual void AddPlace(T element, int index)=0;
         virtual void RemoveFront()=0;
         virtual void RemoveBack()=0;
-        virtual void RemovePlace(int index)=0;
-        virtual int Search(T element)=0;
+        virtual bool RemovePlace(int index)=0;
+        virtual bool Search(T element)=0;
         virtual void Display()=0;
 
 
