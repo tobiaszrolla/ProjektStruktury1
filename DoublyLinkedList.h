@@ -101,6 +101,7 @@ bool  DoublyLinkedList<T>::Search(T value){
         temp = temp->next;
         i++;
     }
+    cout<<"Nie znaleziono elementu"<<endl;
     return(false);                           //gdy nic nie znajdziemu false;
 }
 template <typename T>                                   //Dodawnaie elementu w dowolnym miejscu

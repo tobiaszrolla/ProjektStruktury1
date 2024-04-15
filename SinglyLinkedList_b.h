@@ -14,7 +14,9 @@ public:
 };
 
 template<typename T>                 
-class SinglyLinkedList {             // Definiujemy listę jako klasę 
+class SinglyLinkedList
+    :public List<T>
+{             // Definiujemy listę jako klasę 
 private:
     Node2<T>* head;                  // Wskaźnik na początek listy typu Node2<T>
     Node2<T>* tail;                  // Wskaźnik na koniec listy typu Node2<T>
@@ -30,23 +32,24 @@ public:
         }
     }
 
-    Node2<T>* Search(T searchData) {   // Funkcja do wyszukiwania elementu
+    bool Search(T searchData) {   // Funkcja do wyszukiwania elementu
         if (tail->data == searchData) {  // Jeśli dane w ostatnim elemencie są równe searchData
             cout << "Znaleziony element: " << tail->data << endl;  // Wyświetlamy znaleziony element
-            return tail;              // Zwracamy wskaźnik na ostatni element
+            return(true);              // Zwracamy wskaźnik na ostatni element
         }
         Node2<T>* current = head;     // Ustawiamy current na początek listy
         while (current != nullptr) {  // Dopóki current nie jest równy nullptr
             if (current->data == searchData) {  // Jeśli dane w bieżącym elemencie są równe searchData
                 cout << "Znaleziony element: " << current->data << endl;  // Wyświetlamy znaleziony element
-                return current;        // Zwracamy wskaźnik na bieżący element
+                return(true);        // Zwracamy wskaźnik na bieżący element
             }
             current = current->next;  // Przechodzimy do następnego elementu
         }
         if (current == nullptr){      // Jeśli current jest równy nullptr
             cout << "Brak elementu w liście" << endl;  // Wyświetlamy komunikat o braku elementu
-            return nullptr;           // Zwracamy nullptr
+            return(false);           // Zwracamy nullptr
         }
+        return(false);
     }
 
     void AddFront(T newData) {     // Funkcja dodająca na początek
@@ -172,7 +175,7 @@ public:
         }
     }
 
-    void display() {                 // Funkcja wyświetlająca zawartość listy
+    void Display() {                 // Funkcja wyświetlająca zawartość listy
         Node2<T>* current = head;     // Ustawiamy current na początek listy
         while (current != nullptr) {  // Dopóki current nie jest równy nullptr
             cout << current->data << " ";  // Wyświetlamy dane bieżącego elementu

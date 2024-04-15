@@ -171,6 +171,7 @@ bool ArrayList<T>::Search(T number){
             return(true);
         }
     }
+    cout<<"Nie znaleciono elementu"<<endl;
     return(false);//jeśli nie ma elementu w liście zwróć false
 }
 

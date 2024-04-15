@@ -14,7 +14,9 @@ public:
 };
 
 template<typename T>                 
-class LinkedList {                   // Definiujemy listę jako klasę
+class LinkedList 
+    :public List<T>
+{                   // Definiujemy listę jako klasę
 private:
     Node<T>* head;                   // Wskaźnik head na początek listy 
 public:
@@ -27,19 +29,20 @@ public:
         }
     }
 
-    Node<T>* Search(T searchData) {    // Funkcja do wyszukiwania elementu
+    bool Search(T searchData) {    // Funkcja do wyszukiwania elementu
         Node<T>* current = head;     // Ustawiamy current na początek listy
         while (current != nullptr) {   // Dopóki current nie jest równy nullptr
             if (current->data == searchData) {    // Jeśli dane w bieżącym elemencie są równe searchData
                 cout << "Znaleziony element: " << current->data << endl;  // Wyświetlamy znaleziony element
-                return current;        // Zwracamy wskaźnik na bieżący element
+                return(true);       // Zwracamy wskaźnik na bieżący element
             }
             current = current->next;   // Przechodzimy do następnego elementu
         }
         if (current == nullptr){      // Jeśli current jest równy nullptr
             cout << "Brak elementu w liście" << endl;  // Wyświetlamy komunikat o braku elementu
-            return nullptr;           // Zwracamy nullptr
+            return(false);           // Zwracamy nullptr
         }
+        return(false);
         }
 
     void AddFront(T val) {         // Funkcja dodająca na początek
@@ -134,7 +137,7 @@ public:
     }
 
 
-    void display() {                  // Funkcja wyświetlająca zawartość listy
+    void Display() {                  // Funkcja wyświetlająca zawartość listy
         Node<T>* temp = head;          // Ustawiamy temp na początek listy
         while (temp != nullptr) {      // Dopóki temp nie jest równy nullptr
             cout << temp->data << " "; // Wyświetlamy dane bieżącego elementu
