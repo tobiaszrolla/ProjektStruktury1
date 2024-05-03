@@ -170,6 +170,7 @@ public:
             previous->next = current->next;  // Ustawiamy next poprzedniego elementu na next bieżącego elementu
             delete current;                  //Usuwamy element z bieżącej pozycji
             return(true);               
+            }
         }
     }
 
